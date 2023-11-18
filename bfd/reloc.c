@@ -2186,6 +2186,24 @@ ENUMDOC
   MIPS ELF relocations (VxWorks and PLT extensions).
 
 ENUM
+  BFD_RELOC_RSP_7_0
+ENUMX
+  BFD_RELOC_RSP_7_1
+ENUMX
+  BFD_RELOC_RSP_7_2
+ENUMX
+  BFD_RELOC_RSP_7_3
+ENUMX
+  BFD_RELOC_RSP_7_4
+ENUMDOC
+  MIPS SGI RSP relocations, low 7 bits
+
+ENUM
+  BFD_RELOC_RSP_16
+ENUMDOC
+  MIPS SGI RSP 16-bit relocation
+
+ENUM
   BFD_RELOC_MOXIE_10_PCREL
 ENUMDOC
   Moxie ELF relocations.

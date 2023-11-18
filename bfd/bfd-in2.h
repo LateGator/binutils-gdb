@@ -1454,6 +1454,7 @@ enum bfd_architecture
 #define bfd_mach_mips_octeon3          6503
 #define bfd_mach_mips_xlr              887682   /* decimal 'XLR'.  */
 #define bfd_mach_mips_interaptiv_mr2   736550   /* decimal 'IA2'.  */
+#define bfd_mach_mips_rsp              828380   /* decimal 'RSP'.  */
 #define bfd_mach_mipsisa32             32
 #define bfd_mach_mipsisa32r2           33
 #define bfd_mach_mipsisa32r3           34
@@ -3757,6 +3758,16 @@ enum bfd_reloc_code_real
   /* MIPS ELF relocations (VxWorks and PLT extensions).  */
   BFD_RELOC_MIPS_COPY,
   BFD_RELOC_MIPS_JUMP_SLOT,
+
+  /* MIPS SGI RSP relocations, low 7 bits  */
+  BFD_RELOC_RSP_7_0,
+  BFD_RELOC_RSP_7_1,
+  BFD_RELOC_RSP_7_2,
+  BFD_RELOC_RSP_7_3,
+  BFD_RELOC_RSP_7_4,
+
+  /* MIPS SGI RSP 16-bit relocation  */
+  BFD_RELOC_RSP_16,
 
   /* Moxie ELF relocations.  */
   BFD_RELOC_MOXIE_10_PCREL,
