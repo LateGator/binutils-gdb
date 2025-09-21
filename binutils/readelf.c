@@ -4185,6 +4185,12 @@ decode_MIPS_machine_flags (char *out, unsigned int e_flags)
     case EF_MIPS_ABI_EABI64:
       out = stpcpy (out, ", eabi64");
       break;
+    case EF_MIPS_ABI_U64:
+      out = stpcpy (out, ", u64");
+      break;
+    case EF_MIPS_ABI_U32:
+      out = stpcpy (out, ", u32");
+      break;
     case 0:
       /* We simply ignore the field in this case to avoid confusion:
 	 MIPS ELF does not specify EF_MIPS_ABI, it is a GNU extension.

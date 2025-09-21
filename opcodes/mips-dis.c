@@ -74,6 +74,14 @@ static const char * const mips_gpr_names_newabi[32] =
   "t8",   "t9",   "k0",   "k1",   "gp",   "sp",   "s8",   "ra"
 };
 
+static const char * const mips_gpr_names_u64[32] =
+{
+  "zero", "at",   "av0",  "av1",  "a2",   "a3",   "a4",   "a5",
+  "a6",   "a7",   "t0",   "t1",   "t2",   "t3",   "t4",   "t5",
+  "s0",   "s1",   "s2",   "s3",   "s4",   "s5",   "s6",   "s7",
+  "t6",   "t7",   "k0",   "k1",   "gp",   "sp",   "s8",   "ra"
+};
+
 static const char * const mips_fpr_names_numeric[32] =
 {
   "$f0",  "$f1",  "$f2",  "$f3",  "$f4",  "$f5",  "$f6",  "$f7",
@@ -104,6 +112,14 @@ static const char * const mips_fpr_names_64[32] =
   "ft4",  "ft5",  "ft6",  "ft7",  "fa0",  "fa1",  "fa2",  "fa3",
   "fa4",  "fa5",  "fa6",  "fa7",  "ft8",  "ft9",  "ft10", "ft11",
   "fs0",  "fs1",  "fs2",  "fs3",  "fs4",  "fs5",  "fs6",  "fs7"
+};
+
+static const char * const mips_fpr_names_u64[32] =
+{
+  "fav0", "fav1", "fav2", "fav3", "fa4",  "fa5",  "fa6",  "fa7",
+  "ft0",  "ft1",  "ft2",  "ft3",  "ft4",  "ft5",  "ft6",  "ft7",
+  "ft8",  "ft9",  "ft10", "ft11", "fs0",  "fs1",  "fs2",  "fs3",
+  "fs4",  "fs5",  "fs6",  "fs7",  "fs8",  "fs9",  "fs10", "fs11"
 };
 
 static const char * const mips_cp0_names_numeric[32] =
@@ -454,6 +470,7 @@ struct mips_abi_choice mips_abi_choices[] =
   { "32", mips_gpr_names_oldabi, mips_fpr_names_32 },
   { "n32", mips_gpr_names_newabi, mips_fpr_names_n32 },
   { "64", mips_gpr_names_newabi, mips_fpr_names_64 },
+  { "u64", mips_gpr_names_u64, mips_fpr_names_u64 },
 };
 
 struct mips_arch_choice
@@ -932,6 +949,9 @@ set_default_mips_dis_options (struct disassemble_info *info)
       /* If an ELF "newabi" binary, use the n32/(n)64 GPR names.  */
       if (is_newabi (header))
 	mips_gpr_names = mips_gpr_names_newabi;
+      else if ((header->e_flags & EF_MIPS_ABI) == EF_MIPS_ABI_U64
+	       || (header->e_flags & EF_MIPS_ABI) == EF_MIPS_ABI_U32)
+	mips_gpr_names = mips_gpr_names_u64;
       /* If a microMIPS binary, then don't use MIPS16 bindings.  */
       micromips_ase = is_micromips (header);
       /* OR in any extra ASE flags set in ELF file structures.  */

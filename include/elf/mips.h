@@ -270,6 +270,12 @@ END_RELOC_NUMBERS (R_MIPS_maxext)
 /* EABI in 64 bit mode */
 #define EF_MIPS_ABI_EABI64       0x00004000
 
+/* New U64 ABI */
+#define EF_MIPS_ABI_U64          0x00005000
+
+/* New U32 ABI */
+#define EF_MIPS_ABI_U32          0x00006000
+
 /* In order to support backwards compatibility we also
    define the old versions of some of these constants.  */
 #define E_MIPS_ARCH_1     EF_MIPS_ARCH_1

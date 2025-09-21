@@ -7125,6 +7125,10 @@ elf_mips_abi_name (bfd *abfd)
       return "EABI32";
     case EF_MIPS_ABI_EABI64:
       return "EABI64";
+    case EF_MIPS_ABI_U32:
+      return "U32";
+    case EF_MIPS_ABI_U64:
+      return "U64";
     default:
       return "unknown abi";
     }
@@ -16374,6 +16378,10 @@ _bfd_mips_elf_print_private_bfd_data (bfd *abfd, void *ptr)
     fprintf (file, _(" [abi=EABI32]"));
   else if ((elf_elfheader (abfd)->e_flags & EF_MIPS_ABI) == EF_MIPS_ABI_EABI64)
     fprintf (file, _(" [abi=EABI64]"));
+  else if ((elf_elfheader (abfd)->e_flags & EF_MIPS_ABI) == EF_MIPS_ABI_U64)
+    fprintf (file, _(" [abi=U64]"));
+  else if ((elf_elfheader (abfd)->e_flags & EF_MIPS_ABI) == EF_MIPS_ABI_U32)
+    fprintf (file, _(" [abi=U32]"));
   else if ((elf_elfheader (abfd)->e_flags & EF_MIPS_ABI))
     fprintf (file, _(" [abi unknown]"));
   else if (ABI_N32_P (abfd))

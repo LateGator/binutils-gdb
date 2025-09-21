@@ -8847,6 +8847,7 @@ Target_mips<size, big_endian>::mips_32bit_flags(elfcpp::Elf_Word flags)
   return ((flags & elfcpp::EF_MIPS_32BITMODE) != 0
           || (flags & elfcpp::EF_MIPS_ABI) == elfcpp::EF_MIPS_ABI_O32
           || (flags & elfcpp::EF_MIPS_ABI) == elfcpp::EF_MIPS_ABI_EABI32
+          || (flags & elfcpp::EF_MIPS_ABI) == elfcpp::EF_MIPS_ABI_U32
           || (flags & elfcpp::EF_MIPS_ARCH) == elfcpp::EF_MIPS_ARCH_1
           || (flags & elfcpp::EF_MIPS_ARCH) == elfcpp::EF_MIPS_ARCH_2
           || (flags & elfcpp::EF_MIPS_ARCH) == elfcpp::EF_MIPS_ARCH_32
@@ -12543,6 +12544,10 @@ Target_mips<size, big_endian>::elf_mips_abi_name(elfcpp::Elf_Word e_flags)
       return "EABI32";
     case elfcpp::EF_MIPS_ABI_EABI64:
       return "EABI64";
+    case elfcpp::EF_MIPS_ABI_U64:
+      return "U64";
+    case elfcpp::EF_MIPS_ABI_U32:
+      return "U32";
     default:
       return "unknown abi";
     }

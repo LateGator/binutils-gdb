@@ -457,6 +457,8 @@ enum
   EF_MIPS_ABI_EABI32 = 0x00003000,
   // EABI in 64 bit mode
   EF_MIPS_ABI_EABI64 = 0x00004000,
+  // New U64 ABI
+  EF_MIPS_ABI_U64 = 0x00005000,
 
   // In order to support backwards compatibility we also
   // define the old versions of some of these constants.

@@ -183,7 +183,9 @@ enum mips_abi_level
   O64_ABI,
   N32_ABI,
   N64_ABI,
-  EABI_ABI
+  EABI_ABI,
+  U64_ABI,
+  U32_ABI
 };
 
 /* MIPS ABI we are using for this output file.  */
@@ -257,6 +259,8 @@ struct mips_set_options
   int arch;
   /* True if ".set sym32" is in effect.  */
   bool sym32;
+  /* True if ".set long64" is in effect.  */
+  bool long64;
   /* True if floating-point operations are not allowed.  Changed by .set
      softfloat or .set hardfloat, by command line options -msoft-float or
      -mhard-float.  The default is false.  */
@@ -297,8 +301,8 @@ static struct mips_set_options file_mips_opts =
   /* noreorder */ 0,  /* at */ ATREG, /* warn_about_macros */ 0,
   /* nomove */ 0, /* nobopt */ 0, /* noautoextend */ 0, /* insn32 */ false,
   /* gp */ -1, /* fp */ -1, /* arch */ CPU_UNKNOWN, /* sym32 */ false,
-  /* soft_float */ false, /* single_float */ false, /* oddspreg */ -1,
-  /* init_ase */ 0
+  /* long64 */ false, /* soft_float */ false, /* single_float */ false,
+  /* oddspreg */ -1, /* init_ase */ 0
 };
 
 /* This is similar to file_mips_opts, but for the current set of options.  */
@@ -309,8 +313,8 @@ static struct mips_set_options mips_opts =
   /* noreorder */ 0,  /* at */ ATREG, /* warn_about_macros */ 0,
   /* nomove */ 0, /* nobopt */ 0, /* noautoextend */ 0, /* insn32 */ false,
   /* gp */ -1, /* fp */ -1, /* arch */ CPU_UNKNOWN, /* sym32 */ false,
-  /* soft_float */ false, /* single_float */ false, /* oddspreg */ -1,
-  /* init_ase */ 0
+  /* long64 */ false, /* soft_float */ false, /* single_float */ false,
+  /* oddspreg */ -1, /* init_ase */ 0
 };
 
 /* Which bits of file_ase were explicitly set or cleared by ASE options.  */
@@ -361,13 +365,14 @@ static const char *mips_tune_string;
 static int mips_32bitmode = 0;
 
 /* True if the given ABI requires 32-bit registers.  */
-#define ABI_NEEDS_32BIT_REGS(ABI) ((ABI) == O32_ABI)
+#define ABI_NEEDS_32BIT_REGS(ABI) ((ABI) == O32_ABI || (ABI) == U32_ABI)
 
 /* Likewise 64-bit registers.  */
 #define ABI_NEEDS_64BIT_REGS(ABI)	\
   ((ABI) == N32_ABI			\
    || (ABI) == N64_ABI			\
-   || (ABI) == O64_ABI)
+   || (ABI) == O64_ABI			\
+   || (ABI) == U64_ABI)
 
 #define ISA_IS_R6(ISA)			\
   ((ISA) == ISA_MIPS32R6		\
@@ -490,14 +495,16 @@ static int mips_32bitmode = 0;
 
 #define HAVE_NEWABI (mips_abi == N32_ABI || mips_abi == N64_ABI)
 
-#define HAVE_64BIT_OBJECTS (mips_abi == N64_ABI)
+#define HAVE_64BIT_OBJECTS \
+  (mips_abi == N64_ABI || (mips_abi == U64_ABI && mips_opts.long64))
 
 /* True if relocations are stored in-place.  */
 #define HAVE_IN_PLACE_ADDENDS (!HAVE_NEWABI)
 
 /* The ABI-derived address size.  */
-#define HAVE_64BIT_ADDRESSES \
-  (GPR_SIZE == 64 && (mips_abi == EABI_ABI || mips_abi == N64_ABI))
+#define HAVE_64BIT_ADDRESSES						\
+  (GPR_SIZE == 64 && (mips_abi == EABI_ABI || mips_abi == N64_ABI	\
+		      || (mips_abi == U64_ABI && mips_opts.long64)))
 #define HAVE_32BIT_ADDRESSES (!HAVE_64BIT_ADDRESSES)
 
 /* The size of symbolic constants (i.e., expressions of the form
@@ -1558,6 +1565,8 @@ enum options
     OPTION_MNO_SHARED,
     OPTION_MSYM32,
     OPTION_MNO_SYM32,
+    OPTION_LONG32,
+    OPTION_LONG64,
     OPTION_SOFT_FLOAT,
     OPTION_HARD_FLOAT,
     OPTION_SINGLE_FLOAT,
@@ -1718,6 +1727,8 @@ const struct option md_longopts[] =
   {"mno-shared", no_argument, NULL, OPTION_MNO_SHARED},
   {"msym32", no_argument, NULL, OPTION_MSYM32},
   {"mno-sym32", no_argument, NULL, OPTION_MNO_SYM32},
+  {"mlong32", no_argument, NULL, OPTION_LONG32},
+  {"mlong64", no_argument, NULL, OPTION_LONG64},
   {"msoft-float", no_argument, NULL, OPTION_SOFT_FLOAT},
   {"mhard-float", no_argument, NULL, OPTION_HARD_FLOAT},
   {"msingle-float", no_argument, NULL, OPTION_SINGLE_FLOAT},
@@ -2804,7 +2815,31 @@ struct regname {
     {"$cc6",	RTYPE_FCC | RTYPE_CCC | 6}, \
     {"$cc7",	RTYPE_FCC | RTYPE_CCC | 7}
 
+#define U64_SYMBOLIC_REGISTER_NAMES \
+    {"$av0",	RTYPE_GP | 2},  \
+    {"$av1",	RTYPE_GP | 3},  \
+    {"$a0",	RTYPE_GP | 2},  /* alias for $av0 */ \
+    {"$a1",	RTYPE_GP | 3},  /* alias for $av1 */ \
+    {"$a2",	RTYPE_GP | 4},  \
+    {"$a3",	RTYPE_GP | 5},  \
+    {"$a4",	RTYPE_GP | 6},  \
+    {"$a5",	RTYPE_GP | 7},  \
+    {"$a6",	RTYPE_GP | 8},  \
+    {"$a7",	RTYPE_GP | 9},  \
+    {"$t0",	RTYPE_GP | 10}, \
+    {"$t1",	RTYPE_GP | 11}, \
+    {"$t2",	RTYPE_GP | 12}, \
+    {"$t3",	RTYPE_GP | 13}, \
+    {"$t4",	RTYPE_GP | 14}, \
+    {"$t5",	RTYPE_GP | 15}, \
+    {"$t6",	RTYPE_GP | 24}, \
+    {"$t7",	RTYPE_GP | 25}
+
 #define N32N64_SYMBOLIC_REGISTER_NAMES \
+    {"$a0",	RTYPE_GP | 4},  \
+    {"$a1",	RTYPE_GP | 5},  \
+    {"$a2",	RTYPE_GP | 6},  \
+    {"$a3",	RTYPE_GP | 7},  \
     {"$a4",	RTYPE_GP | 8},  \
     {"$a5",	RTYPE_GP | 9},  \
     {"$a6",	RTYPE_GP | 10}, \
@@ -2816,9 +2851,15 @@ struct regname {
     {"$t0",	RTYPE_GP | 12}, \
     {"$t1",	RTYPE_GP | 13}, \
     {"$t2",	RTYPE_GP | 14}, \
-    {"$t3",	RTYPE_GP | 15}
+    {"$t3",	RTYPE_GP | 15}, \
+    {"$t8",	RTYPE_GP | 24}, \
+    {"$t9",	RTYPE_GP | 25}
 
 #define O32_SYMBOLIC_REGISTER_NAMES \
+    {"$a0",	RTYPE_GP | 4},  \
+    {"$a1",	RTYPE_GP | 5},  \
+    {"$a2",	RTYPE_GP | 6},  \
+    {"$a3",	RTYPE_GP | 7},  \
     {"$t0",	RTYPE_GP | 8},  \
     {"$t1",	RTYPE_GP | 9},  \
     {"$t2",	RTYPE_GP | 10}, \
@@ -2830,7 +2871,9 @@ struct regname {
     {"$ta0",	RTYPE_GP | 12}, /* alias for $t4 */ \
     {"$ta1",	RTYPE_GP | 13}, /* alias for $t5 */ \
     {"$ta2",	RTYPE_GP | 14}, /* alias for $t6 */ \
-    {"$ta3",	RTYPE_GP | 15}  /* alias for $t7 */
+    {"$ta3",	RTYPE_GP | 15}, /* alias for $t7 */ \
+    {"$t8",	RTYPE_GP | 24}, \
+    {"$t9",	RTYPE_GP | 25}
 
 /* Remaining symbolic register names.  */
 #define SYMBOLIC_REGISTER_NAMES \
@@ -2839,10 +2882,6 @@ struct regname {
     {"$AT",	RTYPE_GP | 1},  \
     {"$v0",	RTYPE_GP | 2},  \
     {"$v1",	RTYPE_GP | 3},  \
-    {"$a0",	RTYPE_GP | 4},  \
-    {"$a1",	RTYPE_GP | 5},  \
-    {"$a2",	RTYPE_GP | 6},  \
-    {"$a3",	RTYPE_GP | 7},  \
     {"$s0",	RTYPE_GP | 16}, \
     {"$s1",	RTYPE_GP | 17}, \
     {"$s2",	RTYPE_GP | 18}, \
@@ -2851,8 +2890,6 @@ struct regname {
     {"$s5",	RTYPE_GP | 21}, \
     {"$s6",	RTYPE_GP | 22}, \
     {"$s7",	RTYPE_GP | 23}, \
-    {"$t8",	RTYPE_GP | 24}, \
-    {"$t9",	RTYPE_GP | 25}, \
     {"$k0",	RTYPE_GP | 26}, \
     {"$kt0",	RTYPE_GP | 26}, \
     {"$k1",	RTYPE_GP | 27}, \
@@ -2947,6 +2984,11 @@ static const struct regname reg_names_o32[] = {
 
 static const struct regname reg_names_n32n64[] = {
   N32N64_SYMBOLIC_REGISTER_NAMES,
+  {0, 0}
+};
+
+static const struct regname reg_names_u64[] = {
+  U64_SYMBOLIC_REGISTER_NAMES,
   {0, 0}
 };
 
@@ -3814,7 +3856,14 @@ md_begin (void)
     symbol_table_insert (symbol_new (reg_names[i].name, reg_section,
 				     &zero_address_frag,
 				     reg_names[i].num));
-  if (HAVE_NEWABI)
+
+
+  if (mips_abi == U64_ABI || mips_abi == U32_ABI)
+    for (i = 0; reg_names_u64[i].name; i++)
+      symbol_table_insert (symbol_new (reg_names_u64[i].name, reg_section,
+				       &zero_address_frag,
+				       reg_names_u64[i].num));
+  else if (HAVE_NEWABI)
     for (i = 0; reg_names_n32n64[i].name; i++)
       symbol_table_insert (symbol_new (reg_names_n32n64[i].name, reg_section,
 				       &zero_address_frag,
@@ -15115,6 +15164,14 @@ md_parse_option (int c, const char *arg)
       file_mips_opts.sym32 = false;
       break;
 
+    case OPTION_LONG32:
+      file_mips_opts.long64 = false;
+      break;
+
+    case OPTION_LONG64:
+      file_mips_opts.long64 = true;
+      break;
+
       /* When generating ELF code, we permit -KPIC and -call_shared to
 	 select SVR4_PIC, and -non_shared to select no PIC.  This is
 	 intended to be compatible with Irix 5.  */
@@ -15221,6 +15278,10 @@ md_parse_option (int c, const char *arg)
 	}
       else if (strcmp (arg, "eabi") == 0)
 	mips_abi = EABI_ABI;
+      else if (strcmp (arg, "u64") == 0)
+	mips_abi = U64_ABI;
+      else if (strcmp (arg, "u32") == 0)
+	mips_abi = U32_ABI;
       else
 	{
 	  as_fatal (_("invalid abi -mabi=%s"), arg);
@@ -16779,6 +16840,10 @@ parse_code_option (char * name)
     mips_opts.sym32 = true;
   else if (strcmp (name, "nosym32") == 0)
     mips_opts.sym32 = false;
+  else if (strcmp (name, "long32") == 0)
+    mips_opts.long64 = false;
+  else if (strcmp (name, "long64") == 0)
+    mips_opts.long64 = false;
   else
     return OPTION_TYPE_BAD;
 
@@ -19596,6 +19661,10 @@ mips_elf_final_processing (void)
       else
 	elf_elfheader (stdoutput)->e_flags |= EF_MIPS_ABI_EABI32;
     }
+  else if (mips_abi == U64_ABI)
+    elf_elfheader (stdoutput)->e_flags |= EF_MIPS_ABI_U64;
+  else if (mips_abi == U32_ABI)
+    elf_elfheader (stdoutput)->e_flags |= EF_MIPS_ABI_U32;
 
   /* Nothing to do for N32_ABI or N64_ABI.  */
 
@@ -20542,6 +20611,8 @@ MIPS options:\n\
   show (stream, "n32", &column, &first);
   show (stream, "64", &column, &first);
   show (stream, "eabi", &column, &first);
+  show (stream, "u64", &column, &first);
+  show (stream, "u32", &column, &first);
 
   fputc ('\n', stream);
 
