@@ -868,6 +868,20 @@ static reloc_howto_type elf_mips_howto_table_rel[] =
 	 0x0000ffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
 
+  /* Zero relative reference.  */
+  HOWTO (R_MIPS_ZPREL,		/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MIPS_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 /* The relocation table used for SHT_RELA sections.  */
@@ -1650,6 +1664,20 @@ static reloc_howto_type elf_mips_howto_table_rela[] =
 	 0x0000ffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
 
+  /* Zero relative reference.  */
+  HOWTO (R_MIPS_ZPREL,		/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MIPS_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 static reloc_howto_type elf_mips16_howto_table_rel[] =
@@ -1866,6 +1894,21 @@ static reloc_howto_type elf_mips16_howto_table_rel[] =
 	 0x0000ffff,		/* src_mask */
 	 0x0000ffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
+
+  /* Zero relative reference.  */
+  HOWTO (R_MIPS16_ZPREL,	/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MIPS16_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 static reloc_howto_type elf_mips16_howto_table_rela[] =
@@ -2082,6 +2125,21 @@ static reloc_howto_type elf_mips16_howto_table_rela[] =
 	 0,			/* src_mask */
 	 0x0000ffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
+
+  /* Zero relative reference.  */
+  HOWTO (R_MIPS16_ZPREL,	/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MIPS16_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 static reloc_howto_type elf_micromips_howto_table_rel[] =
@@ -2561,6 +2619,21 @@ static reloc_howto_type elf_micromips_howto_table_rel[] =
 	 0x007fffff,		/* src_mask */
 	 0x007fffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
+
+  /* Zero relative reference.  */
+  HOWTO (R_MICROMIPS_ZPREL,	/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MICROMIPS_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 static reloc_howto_type elf_micromips_howto_table_rela[] =
@@ -3063,6 +3136,21 @@ static reloc_howto_type elf_micromips_howto_table_rela[] =
 	 0,			/* src_mask */
 	 0x007fffff,		/* dst_mask */
 	 true),			/* pcrel_offset */
+
+  /* Zero relative reference.  */
+  HOWTO (R_MICROMIPS_ZPREL,	/* type */
+	 0,			/* rightshift */
+	 4,			/* size */
+	 16,			/* bitsize */
+	 false,			/* pc_relative */
+	 0,			/* bitpos */
+	 complain_overflow_dont, /* complain_on_overflow */
+	 _bfd_mips_elf_generic_reloc, /* special_function */
+	 "R_MICROMIPS_ZPREL",	/* name */
+	 true,			/* partial_inplace */
+	 0x0000ffff,		/* src_mask */
+	 0x0000ffff,		/* dst_mask */
+	 false),		/* pcrel_offset */
 };
 
 /* GNU extension to record C++ vtable hierarchy */
@@ -3536,6 +3624,7 @@ static const struct elf_reloc_map mips_reloc_map[] =
   { BFD_RELOC_LO16, R_MIPS_LO16 },
   { BFD_RELOC_GPREL16, R_MIPS_GPREL16 },
   { BFD_RELOC_GPREL32, R_MIPS_GPREL32 },
+  { BFD_RELOC_MIPS_ZPREL, R_MIPS_ZPREL },
   { BFD_RELOC_MIPS_JMP, R_MIPS_26 },
   { BFD_RELOC_MIPS_LITERAL, R_MIPS_LITERAL },
   { BFD_RELOC_MIPS_GOT16, R_MIPS_GOT16 },
@@ -3584,6 +3673,7 @@ static const struct elf_reloc_map mips16_reloc_map[] =
 {
   { BFD_RELOC_MIPS16_JMP, R_MIPS16_26 - R_MIPS16_min },
   { BFD_RELOC_MIPS16_GPREL, R_MIPS16_GPREL - R_MIPS16_min },
+  { BFD_RELOC_MIPS16_ZPREL, R_MIPS16_ZPREL - R_MIPS16_min },
   { BFD_RELOC_MIPS16_GOT16, R_MIPS16_GOT16 - R_MIPS16_min },
   { BFD_RELOC_MIPS16_CALL16, R_MIPS16_CALL16 - R_MIPS16_min },
   { BFD_RELOC_MIPS16_HI16_S, R_MIPS16_HI16 - R_MIPS16_min },
@@ -3606,6 +3696,7 @@ static const struct elf_reloc_map micromips_reloc_map[] =
   { BFD_RELOC_MICROMIPS_HI16_S, R_MICROMIPS_HI16 - R_MICROMIPS_min },
   { BFD_RELOC_MICROMIPS_LO16, R_MICROMIPS_LO16 - R_MICROMIPS_min },
   { BFD_RELOC_MICROMIPS_GPREL16, R_MICROMIPS_GPREL16 - R_MICROMIPS_min },
+  { BFD_RELOC_MICROMIPS_ZPREL, R_MICROMIPS_ZPREL - R_MICROMIPS_min },
   { BFD_RELOC_MICROMIPS_LITERAL, R_MICROMIPS_LITERAL - R_MICROMIPS_min },
   { BFD_RELOC_MICROMIPS_GOT16, R_MICROMIPS_GOT16 - R_MICROMIPS_min },
   { BFD_RELOC_MICROMIPS_7_PCREL_S1, R_MICROMIPS_PC7_S1 - R_MICROMIPS_min },

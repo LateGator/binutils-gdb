@@ -340,6 +340,7 @@ mips16_reloc(unsigned int r_type)
     {
     case elfcpp::R_MIPS16_26:
     case elfcpp::R_MIPS16_GPREL:
+    case elfcpp::R_MIPS16_ZPREL:
     case elfcpp::R_MIPS16_GOT16:
     case elfcpp::R_MIPS16_CALL16:
     case elfcpp::R_MIPS16_HI16:
@@ -368,6 +369,7 @@ micromips_reloc(unsigned int r_type)
     case elfcpp::R_MICROMIPS_HI16:
     case elfcpp::R_MICROMIPS_LO16:
     case elfcpp::R_MICROMIPS_GPREL16:
+    case elfcpp::R_MICROMIPS_ZPREL:
     case elfcpp::R_MICROMIPS_LITERAL:
     case elfcpp::R_MICROMIPS_GOT16:
     case elfcpp::R_MICROMIPS_PC7_S1:
@@ -10074,6 +10076,7 @@ mips_get_size_for_reloc(unsigned int r_type, Relobj* object)
     case elfcpp::R_MIPS_HIGHER:
     case elfcpp::R_MIPS_HIGHEST:
     case elfcpp::R_MIPS_GPREL16:
+    case elfcpp::R_MIPS_ZPREL:
     case elfcpp::R_MIPS16_HI16:
     case elfcpp::R_MIPS16_LO16:
     case elfcpp::R_MIPS_PC16:
@@ -10092,6 +10095,7 @@ mips_get_size_for_reloc(unsigned int r_type, Relobj* object)
     case elfcpp::R_MIPS_TLS_TPREL_HI16:
     case elfcpp::R_MIPS_TLS_TPREL_LO16:
     case elfcpp::R_MIPS16_GPREL:
+    case elfcpp::R_MIPS16_ZPREL:
     case elfcpp::R_MIPS_GOT_DISP:
     case elfcpp::R_MIPS_LITERAL:
     case elfcpp::R_MIPS_GOT_PAGE:
@@ -11959,6 +11963,9 @@ Target_mips<size, big_endian>::Relocate::relocate(
         case elfcpp::R_MIPS16_LO16:
         case elfcpp::R_MICROMIPS_LO16:
         case elfcpp::R_MICROMIPS_HI0_LO16:
+        case elfcpp::R_MIPS_ZPREL:
+        case elfcpp::R_MIPS16_ZPREL:
+        case elfcpp::R_MICROMIPS_ZPREL:
           reloc_status = Reloc_funcs::rello16(target, view, object, psymval,
                                               r_addend, extract_addend, address,
                                               gp_disp, r_types[i], r_sym,
@@ -12415,12 +12422,15 @@ Target_mips<size, big_endian>::Scan::get_reference_flags(
     case elfcpp::R_MIPS_LO16:
     case elfcpp::R_MIPS_HIGHER:
     case elfcpp::R_MIPS_HIGHEST:
+    case elfcpp::R_MIPS_ZPREL:
     case elfcpp::R_MIPS16_HI16:
     case elfcpp::R_MIPS16_LO16:
+    case elfcpp::R_MIPS16_ZPREL:
     case elfcpp::R_MICROMIPS_HI16:
     case elfcpp::R_MICROMIPS_LO16:
     case elfcpp::R_MICROMIPS_HIGHER:
     case elfcpp::R_MICROMIPS_HIGHEST:
+    case elfcpp::R_MICROMIPS_ZPREL:
       return Symbol::ABSOLUTE_REF;
 
     case elfcpp::R_MIPS_26:

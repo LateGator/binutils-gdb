@@ -98,7 +98,9 @@ START_RELOC_NUMBERS (elf_mips_reloc_type)
   RELOC_NUMBER (R_MIPS_PC19_S2, 63)
   RELOC_NUMBER (R_MIPS_PCHI16, 64)
   RELOC_NUMBER (R_MIPS_PCLO16, 65)
-  FAKE_RELOC (R_MIPS_max, 66)
+  /* Zero relative.  */
+  RELOC_NUMBER (R_MIPS_ZPREL, 66)
+  FAKE_RELOC (R_MIPS_max, 67)
   /* These relocs are used for the mips16.  */
   FAKE_RELOC (R_MIPS16_min, 100)
   RELOC_NUMBER (R_MIPS16_26, 100)
@@ -115,7 +117,8 @@ START_RELOC_NUMBERS (elf_mips_reloc_type)
   RELOC_NUMBER (R_MIPS16_TLS_TPREL_HI16, 111)
   RELOC_NUMBER (R_MIPS16_TLS_TPREL_LO16, 112)
   RELOC_NUMBER (R_MIPS16_PC16_S1, 113)
-  FAKE_RELOC (R_MIPS16_max, 114)
+  RELOC_NUMBER (R_MIPS16_ZPREL, 114)
+  FAKE_RELOC (R_MIPS16_max, 115)
   /* These relocations are specific to VxWorks.  */
   RELOC_NUMBER (R_MIPS_COPY, 126)
   RELOC_NUMBER (R_MIPS_JUMP_SLOT, 127)
@@ -159,7 +162,8 @@ START_RELOC_NUMBERS (elf_mips_reloc_type)
   /* microMIPS GP- and PC-relative relocations. */
   RELOC_NUMBER (R_MICROMIPS_GPREL7_S2, 172)
   RELOC_NUMBER (R_MICROMIPS_PC23_S2, 173)
-  FAKE_RELOC (R_MICROMIPS_max, 174)
+  RELOC_NUMBER (R_MICROMIPS_ZPREL, 174)
+  FAKE_RELOC (R_MICROMIPS_max, 175)
 
   /* This was a GNU extension used by embedded-PIC.  It was co-opted by
      mips-linux for exception-handling data.  GCC stopped using it in

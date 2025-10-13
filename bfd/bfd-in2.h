@@ -3620,6 +3620,11 @@ enum bfd_reloc_code_real
   /* MIPS16 GP relative reloc.  */
   BFD_RELOC_MIPS16_GPREL,
 
+  /* MIPS 16-bit zero-relative value.  */
+  BFD_RELOC_MIPS_ZPREL,
+  BFD_RELOC_MIPS16_ZPREL,
+  BFD_RELOC_MICROMIPS_ZPREL,
+
   /* High 16 bits of 32-bit value; simple reloc.  */
   BFD_RELOC_HI16,
 

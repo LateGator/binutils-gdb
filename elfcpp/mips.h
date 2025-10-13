@@ -104,6 +104,7 @@ enum
   R_MIPS_PC19_S2 = 63,
   R_MIPS_PCHI16 = 64,
   R_MIPS_PCLO16 = 65,
+  R_MIPS_ZPREL = 66,
   // These relocs are used for the mips16.
   R_MIPS16_26 = 100,
   R_MIPS16_GPREL = 101,
@@ -118,6 +119,7 @@ enum
   R_MIPS16_TLS_GOTTPREL = 110,
   R_MIPS16_TLS_TPREL_HI16 = 111,
   R_MIPS16_TLS_TPREL_LO16 = 112,
+  R_MIPS16_ZPREL = 114,
 
   R_MIPS_COPY = 126,
   R_MIPS_JUMP_SLOT = 127,
@@ -157,6 +159,7 @@ enum
   // microMIPS GP- and PC-relative relocations.
   R_MICROMIPS_GPREL7_S2 = 172,
   R_MICROMIPS_PC23_S2 = 173,
+  R_MICROMIPS_ZPREL = 174,
 
   // This was a GNU extension used by embedded-PIC.  It was co-opted by
   // mips-linux for exception-handling data.  GCC stopped using it in

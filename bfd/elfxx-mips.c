@@ -2188,6 +2188,7 @@ mips16_reloc_p (int r_type)
     {
     case R_MIPS16_26:
     case R_MIPS16_GPREL:
+    case R_MIPS16_ZPREL:
     case R_MIPS16_GOT16:
     case R_MIPS16_CALL16:
     case R_MIPS16_HI16:
@@ -6266,6 +6267,22 @@ mips_elf_calculate_relocation (bfd *abfd, bfd *input_bfd,
 	  value += gp0;
 	if (was_local_p || h->root.root.type != bfd_link_hash_undefweak)
 	  overflowed_p = mips_elf_overflow_p (value, bits);
+      }
+      break;
+
+    case R_MIPS_ZPREL:
+    case R_MIPS16_ZPREL:
+    case R_MICROMIPS_ZPREL:
+      {
+	unsigned int size = bfd_get_reloc_size (howto);
+	value = symbol + addend;
+	if (size < 8)
+	  {
+	    value = _bfd_mips_elf_sign_extend (value, 8 * size);
+	    if ((bfd_signed_vma) value >= 0)
+	      value &= ((bfd_vma) 1 << (8 * size)) - 1;
+	  }
+	overflowed_p = mips_elf_overflow_p (value, 16);
       }
       break;
 
